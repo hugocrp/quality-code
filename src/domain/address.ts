@@ -1,17 +1,25 @@
 export class Address {
   id?: string;
-  street: string;
+  address: string;
   city: string;
   zip: string;
+  country: string;
 
-  constructor(street: string, city: string, zip: string, id?: string) {
+  constructor(
+    address: string,
+    city: string,
+    zip: string,
+    country: string,
+    id?: string
+  ) {
     this.id = id;
-    this.street = street;
+    this.address = address;
     this.city = city;
     this.zip = zip;
+    this.country = country;
   }
 
   getFullAddress(): string {
-    return `${this.street}, ${this.city}, ${this.zip}`;
+    return `${this.address}, ${this.city}, ${this.zip}, ${this.country}`;
   }
 }
