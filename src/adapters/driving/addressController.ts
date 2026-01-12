@@ -16,7 +16,9 @@ router.get("/", async (req, res) => {
 router.post("/", async (req, res) => {
   const { street, city, zip, country } = req.body;
   if (!street || !city || !zip || !country) {
-    return res.status(400).json({ message: "street, city and zip required" });
+    return res
+      .status(400)
+      .json({ message: "street, city, country and zip required" });
   }
   const created = await service.createAddress(
     new Address(street, city, zip, country)
