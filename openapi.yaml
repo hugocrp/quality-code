@@ -1,84 +1,490 @@
-openapi: 3.0.0
+openapi: 3.0.3
 info:
-  title: AddressApp API
-  version: 0.1.0
+  title: Contact Management API
+  description: API CRUD pour gérer des contacts avec leurs coordonnées et idées politiques
+  version: 1.0.0
+  contact:
+    name: Ian BERTIN, Hugo CREPIN
+
+servers:
+  - url: http://localhost:5000/api
+    description: Serveur de développement
+
 paths:
-  /addresses:
+  /contact:
     get:
-      summary: List addresses
+      summary: Récupérer tous les contacts
+      description: Retourne la liste de tous les contacts
+      operationId: getContacts
+      tags:
+        - Contacts
       responses:
-        '200':
-          description: OK
+        "200":
+          description: Liste des contacts récupérée avec succès
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Address'
+                  $ref: "#/components/schemas/Contact"
+
     post:
-      summary: Create address
+      summary: Créer un nouveau contact
+      description: Ajoute un nouveau contact dans le système
+      operationId: createContact
+      tags:
+        - Contacts
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/AddressInput'
+              $ref: "#/components/schemas/ContactInput"
       responses:
-        '201':
-          description: Created
+        "201":
+          description: Contact créé avec succès
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Address'
+                $ref: "#/components/schemas/Contact"
+        "400":
+          description: Données invalides
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
 
-  /addresses/{id}:
+  /contact/{contactId}:
     get:
-      summary: Get address by id
+      summary: Récupérer un contact spécifique
+      description: Retourne les détails d'un contact par son ID
+      operationId: getContactById
+      tags:
+        - Contacts
       parameters:
-        - name: id
+        - name: contactId
           in: path
           required: true
+          description: ID du contact
           schema:
-            type: string
+            type: integer
       responses:
-        '200':
-          description: OK
+        "200":
+          description: Contact trouvé
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Address'
-        '404':
-          description: Not Found
+                $ref: "#/components/schemas/Contact"
+        "404":
+          description: Contact non trouvé
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+    put:
+      summary: Mettre à jour un contact
+      description: Met à jour les informations d'un contact existant
+      operationId: updateContact
+      tags:
+        - Contacts
+      parameters:
+        - name: contactId
+          in: path
+          required: true
+          description: ID du contact
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ContactInput"
+      responses:
+        "200":
+          description: Contact mis à jour avec succès
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Contact"
+        "404":
+          description: Contact non trouvé
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "400":
+          description: Données invalides
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+    delete:
+      summary: Supprimer un contact
+      description: Supprime un contact du système
+      operationId: deleteContact
+      tags:
+        - Contacts
+      parameters:
+        - name: contactId
+          in: path
+          required: true
+          description: ID du contact
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Contact supprimé avec succès
+        "404":
+          description: Contact non trouvé
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /politic:
+    get:
+      summary: Récupérer toutes les idées
+      description: Retourne la liste de toutes les idées
+      operationId: getPolitics
+      tags:
+        - Politiques
+      responses:
+        "200":
+          description: Liste des idées politiques avec succès
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Politic"
+
+    post:
+      summary: Créer de nouvelles idées politique
+      description: Ajoute une nouvelle idée politique dans le système
+      operationId: createPolitic
+      tags:
+        - Politiques
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PoliticInput"
+      responses:
+        "201":
+          description: Politic créé avec succès
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Politic"
+        "400":
+          description: Données invalides
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /politic/{politicId}:
+    get:
+      summary: Récupérer une idée spécifique
+      description: Retourne les détails d'une idée politique par son ID
+      operationId: getPoliticById
+      tags:
+        - Politiques
+      parameters:
+        - name: politicId
+          in: path
+          required: true
+          description: ID d'une idée politique
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Politique trouvé
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Politic"
+        "404":
+          description: Politique non trouvé
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+    put:
+      summary: Mettre à jour une idée politic
+      description: Met à jour les informations d'une politique
+      operationId: updatePolitics
+      tags:
+        - Politiques
+      parameters:
+        - name: politicId
+          in: path
+          required: true
+          description: ID du idée politique
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PoliticInput"
+      responses:
+        "200":
+          description: Politique mis à jour avec succès
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Politic"
+        "404":
+          description: Politic non trouvé
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "400":
+          description: Données invalides
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+    delete:
+      summary: Supprimer une idée politique
+      description: Supprime une idée politique
+      operationId: deletePolitic
+      tags:
+        - Politiques
+      parameters:
+        - name: politicId
+          in: path
+          required: true
+          description: ID d'une idée politique
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Politique supprimé avec succès
+        "404":
+          description: Politique non trouvé
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /contact/getPoliticsByContactId/{contactId}:
+    get:
+      summary: Récupérer les idées politique d'un contact
+      description: Retourne les détails d'une idée politique par son contactId
+      operationId: getPoliticsByContactId
+      tags:
+        - Politiques
+      parameters:
+        - name: contactId
+          in: path
+          required: true
+          description: ID d'un contact
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Politique trouvé
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Politic"
+        "404":
+          description: Politique non trouvé
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
 
 components:
   schemas:
-    Address:
+    Contact:
       type: object
-      properties:
-        id:
-          type: string
-        street:
-          type: string
-        city:
-          type: string
-        zip:
-          type: string
       required:
         - id
-        - street
-        - city
-        - zip
-
-    AddressInput:
-      type: object
+        - last_name
+        - first_name
+        - email
+        - mobile_number
       properties:
-        street:
+        id:
+          type: integer
+          description: ID unique du contact
+          example: 1
+        last_name:
           type: string
-        city:
+          description: Le nom du contact
+          example: BERTIN
+        first_name:
           type: string
+          description: Le prénom du contact
+          example: Ian
+        email:
+          type: string
+          format: email
+          description: Adresse email du contact
+          example: "hugo.crepin@example.com"
+        mobile_number:
+          type: string
+          description: Numéro de téléphone du contact
+          pattern: '^(\+33|0)[1-9](\d{2}){4}$'
+          example: "+33612345678"
+        address:
+          $ref: "#/components/schemas/Address"
+        social_media:
+          $ref: "#/components/schemas/Social_media"
+        created_at:
+          type: string
+          format: date-time
+          description: Date de création du contact
+          example: "2026-01-12T10:30:00Z"
+        updated_at:
+          type: string
+          format: date-time
+          description: Date de dernière mise à jour
+          example: "2026-01-12T10:30:00Z"
+
+    Politic:
+      type: object
+      description: Idée politique d'un contact
+      required:
+        - id
+      properties:
+        orientation:
+          type: string
+          description: orientation politique
+          example: droite, gauche, extreme_droite
+        currents:
+          type: array
+          items:
+            type: string
+            example: nationalisme,socialisme,communisme
+        favorite_parties:
+          type: array
+          items:
+            type: string
+            example: RN,LFI,PS
+        political_interest_level:
+          type: integer
+        id_contact:
+          type: integer
+
+    PoliticInput:
+      type: object
+      required:
+        - orientation
+        - id_contact
+        - currents
+        - favorite_parties
+      properties:
+        orientation:
+          type: string
+          description: orientation politique
+          example: droite, gauche, extreme_droite
+        currents:
+          type: array
+          items:
+            type: string
+            example: nationalisme,socialisme,communisme
+        favorite_parties:
+          type: array
+          items:
+            type: string
+            example: RN,LFI,PS
+        political_interest_level:
+          type: integer
+        id_contact:
+          type: integer
+
+    Address:
+      type: object
+      description: Adresse postale du contact
+      required:
+        - address
+        - zip
+        - city
+        - country
+      properties:
+        address:
+          type: string
+          description: Numéro et nom de rue
+          example: "123 Rue de la République"
         zip:
           type: string
+          description: Code postal
+          pattern: '^\d{5}$'
+          example: "75001"
+        city:
+          type: string
+          description: Ville
+          example: "Paris"
+        country:
+          type: string
+          description: Pays
+          example: "France"
+          default: "France"
+
+    Social_media:
+      type: object
+      description: reseaux sociaux du contact
+      properties:
+        application:
+          type: string
+          description: Nom de l'application
+          example: Instagram
+        nomCompte:
+          type: string
+          description: Nom de compte
+          example: ian
+
+    ContactInput:
+      type: object
       required:
-        - street
-        - city
-        - zip
+        - last_name
+        - first_name
+      properties:
+        last_name:
+          type: string
+          description: Le nom du contact
+          example: BERTIN
+        first_name:
+          type: string
+          description: Le prénom du contact
+          example: Ian
+        email:
+          type: string
+          format: email
+          description: Adresse email du contact
+          example: "hugo.crepin@example.com"
+        mobile_number:
+          type: string
+          description: Numéro de téléphone du contact
+          pattern: '^(\+33|0)[1-9](\d{2}){4}$'
+          example: "+33612345678"
+        address:
+          $ref: "#/components/schemas/Address"
+        social_media:
+          $ref: "#/components/schemas/Social_media"
+
+    Error:
+      type: object
+      required:
+        - message
+      properties:
+        message:
+          type: string
+          description: Message d'erreur
+          example: "Contact non trouvé"
+        code:
+          type: string
+          description: Code d'erreur
+          example: "NOT_FOUND"
